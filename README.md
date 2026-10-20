@@ -1,37 +1,41 @@
-# Loom Monitoring & Control System
+# Loomatrix – Smart Loom Monitoring & Control System (LOOM_MANAGEMENT)
 
-A frontend-only industrial loom monitoring dashboard built with React, Vite, Tailwind CSS, React Router, Lucide React, and Recharts.
+An industrial-grade supervisory monitoring and machine management system built with React, Vite, Tailwind CSS, Express, and SQL database (SQLite / MySQL).
 
 ## Features
 
-- Secure demo login with localStorage state persistence
-- Dark professional factory control-room dashboard
-- Live monitoring cards for each loom
-- Summary metric cards with automatic state updates
-- Loom management table with search, filter, sort, add, edit, and delete flows
-- Dynamic set configuration generation and Wi-Fi configuration UI
-- Control panel with START, STOP, REVERSE, and SINGLE TAKE actions
-- Confirmation dialogs, toasts, and notification center
-- Local storage persistence for user state, looms, notifications, and settings
+- Secure authentication with JWT and bcrypt password hashing
+- Industrial operational dashboard with real-time status and telemetry
+- Dynamic multi-set production rules (Take-up and Meter progression)
+- Comprehensive loom management with search, filter, sort, add, edit, and cascade delete
+- Controller Wi-Fi configuration with genuine TCP socket testing
+- Supervisory machine control actions (START, STOP, REVERSE, SINGLE TAKE) with audit logs
+- Dual-theme interface (Light & Dark mode) with responsive layout
+- SQL relational persistence supporting SQLite and MySQL
 
-## Demo credentials
+## Demo Credentials
 
 - Username: admin
 - Password: admin123
 
-## Local development
+## Local Development
 
 ```bash
+# Install dependencies
 npm install
-npm run dev -- --host 0.0.0.0 --port 4173
+
+# Start backend server (Port 5000)
+npm run server
+
+# Start frontend dev server (Port 5173)
+npm run dev
 ```
 
-Then open:
+Open: http://localhost:5173/
 
-- http://localhost:4173/
-
-## Production build
+## Production Build
 
 ```bash
 npm run build
 ```
+
