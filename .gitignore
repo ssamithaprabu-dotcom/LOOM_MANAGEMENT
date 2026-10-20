@@ -6,6 +6,7 @@ node_modules/
 # Production build
 dist/
 build/
+.vite/
 
 # Environment files
 .env
@@ -32,3 +33,11 @@ lerna-debug.log*
 *.sln
 *.sw?
 .DS_Store
+
+# Database backups and temporary files
+*.bak
+*.sqlite.bak
+*.sqlite-journal
+
+# Scratch directory
+scratch/

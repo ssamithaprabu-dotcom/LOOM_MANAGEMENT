@@ -30,28 +30,28 @@ export default function LoomCard({ loom, onAction, actionPending = false }) {
           <div className="flex items-center justify-between border-b border-slate-100 pb-2 dark:border-slate-800/80">
             <span className="text-slate-400">Current Set</span>
             <span className="font-semibold text-cyan-600 dark:text-cyan-400">
-              SET {loom.currentSet || 1}
+              {loom.currentSet ? `SET ${loom.currentSet}` : 'Not available'}
             </span>
           </div>
 
           <div className="flex items-center justify-between border-b border-slate-100 pb-2 dark:border-slate-800/80">
             <span className="text-slate-400">Current Meter</span>
             <span className="font-mono font-bold">
-              {formatMeters(loom.currentMeter)} m
+              {loom.currentMeter != null ? `${formatMeters(loom.currentMeter)} m` : 'Not available'}
             </span>
           </div>
 
           <div className="flex items-center justify-between border-b border-slate-100 pb-2 dark:border-slate-800/80">
             <span className="text-slate-400">Total Meter Run</span>
             <span className="font-mono font-medium">
-              {formatMeters(loom.totalMeterRun)} m
+              {loom.totalMeterRun != null ? `${formatMeters(loom.totalMeterRun)} m` : 'Not available'}
             </span>
           </div>
 
           <div className="flex items-center justify-between border-b border-slate-100 pb-2 dark:border-slate-800/80">
             <span className="text-slate-400">Total Meter Left</span>
             <span className="font-mono font-medium text-slate-400">
-              {formatMeters(loom.totalMeterLeft)} m
+              {loom.totalMeterLeft != null ? `${formatMeters(loom.totalMeterLeft)} m` : 'Not available'}
             </span>
           </div>
 

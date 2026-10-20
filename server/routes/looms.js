@@ -1,4 +1,5 @@
 import express from 'express';
+import net from 'net';
 import { all, get, run } from '../db.js';
 
 const router = express.Router();
@@ -70,6 +71,11 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Loom number and PIC number are required' });
     }
 
+    const duplicate = await get(`SELECT id FROM looms WHERE loom_number = ?`, [Number(loomNumber)]);
+    if (duplicate) {
+      return res.status(400).json({ error: `Loom Number ${loomNumber} already exists. Please choose a unique number.` });
+    }
+
     const loomId = id || `loom-${Date.now()}`;
     const initialStatus = status || 'STOPPED';
 
@@ -127,6 +133,13 @@ router.put('/:id', async (req, res) => {
     const existing = await get(`SELECT * FROM looms WHERE id = ?`, [id]);
     if (!existing) {
       return res.status(404).json({ error: 'Loom not found' });
+    }
+
+    if (loomNumber && Number(loomNumber) !== existing.loom_number) {
+      const duplicate = await get(`SELECT id FROM looms WHERE loom_number = ? AND id != ?`, [Number(loomNumber), id]);
+      if (duplicate) {
+        return res.status(400).json({ error: `Loom Number ${loomNumber} is already in use by another loom.` });
+      }
     }
 
     await run(
@@ -234,13 +247,60 @@ router.post('/:id/action', async (req, res) => {
   }
 });
 
-// POST /api/looms/wifi/test - Test Wi-Fi Connection
+// POST /api/looms/wifi/test - Probe physical controller connection
 router.post('/wifi/test', (req, res) => {
   const { ssid, ipAddress, port } = req.body;
   if (!ssid || !ipAddress || !port) {
-    return res.json({ connected: false, message: 'Invalid Wi-Fi credentials' });
+    return res.json({ connected: false, message: 'Invalid Wi-Fi credentials or missing parameters.' });
   }
-  return res.json({ connected: true, message: 'Connection Successful' });
+
+  const socket = new net.Socket();
+  const targetPort = Number(port) || 8080;
+  let responded = false;
+
+  socket.setTimeout(1200);
+
+  socket.on('connect', () => {
+    if (!responded) {
+      responded = true;
+      socket.destroy();
+      return res.json({ connected: true, message: `Connected to physical controller at ${ipAddress}:${targetPort}.` });
+    }
+  });
+
+  socket.on('timeout', () => {
+    if (!responded) {
+      responded = true;
+      socket.destroy();
+      return res.json({
+        connected: false,
+        message: `Hardware controller unreachable: Timed out connecting to ${ipAddress}:${targetPort}. Physical controller is offline or not linked.`,
+      });
+    }
+  });
+
+  socket.on('error', (err) => {
+    if (!responded) {
+      responded = true;
+      socket.destroy();
+      return res.json({
+        connected: false,
+        message: `Hardware status unavailable: Cannot reach controller at ${ipAddress}:${targetPort} (${err.code || 'Unreachable'}). Physical hardware is not connected.`,
+      });
+    }
+  });
+
+  try {
+    socket.connect(targetPort, ipAddress);
+  } catch (err) {
+    if (!responded) {
+      responded = true;
+      return res.json({
+        connected: false,
+        message: `Hardware connection failed: ${err.message}. Controller not connected.`,
+      });
+    }
+  }
 });
 
 // POST /api/looms/telemetry/tick - Telemetry tick for active looms

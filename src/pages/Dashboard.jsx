@@ -1,4 +1,4 @@
-import { RefreshCw, Cpu, AlertCircle, Info } from 'lucide-react';
+import { RefreshCw, Cpu, AlertCircle } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useLoomContext } from '../context/LoomContext';
 import LoomCard from '../components/LoomCard';
@@ -59,9 +59,6 @@ export default function Dashboard() {
           <h1 className={`text-2xl font-bold tracking-tight ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}>
             Operating Dashboard
           </h1>
-          <p className={`mt-0.5 text-xs ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}>
-            Real-time machine status and production meter monitoring
-          </p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -78,17 +75,6 @@ export default function Dashboard() {
             <RefreshCw size={14} className={loadingLooms ? 'animate-spin' : ''} />
             <span>Refresh</span>
           </button>
-        </div>
-      </div>
-
-      {/* Backend / Hardware Notice Banner */}
-      <div className="flex items-start gap-3 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-4 text-xs text-slate-600 dark:text-slate-300">
-        <Info size={18} className="mt-0.5 shrink-0 text-cyan-500" />
-        <div>
-          <span className="font-semibold text-cyan-600 dark:text-cyan-400">System Telemetry Mode: </span>
-          <span>
-            Displaying live persisted database metrics. Physical controller commands update software registers and audit logs. Physical PLC communication requires active hardware interface link.
-          </span>
         </div>
       </div>
 

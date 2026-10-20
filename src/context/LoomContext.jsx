@@ -189,6 +189,7 @@ export function LoomProvider({ children }) {
   const value = useMemo(
     () => ({
       user,
+      setUser,
       authChecked,
       looms,
       setLooms,

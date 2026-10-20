@@ -35,7 +35,7 @@ export default function LoomDetails() {
     if (action === 'REVERSE') nextStatus = 'WARNING';
     if (action === 'SINGLE TAKE') nextStatus = 'RUNNING';
 
-    await updateLoomStatus(loom.id, nextStatus, action);
+    await updateLoomStatus(loom.id, action);
     showToast(`✓ Loom ${loom.loomNumber} ${action.toLowerCase()} completed`, 'success');
     addNotification('SUCCESS', `Loom ${loom.loomNumber} ${action.toLowerCase()} completed.`);
     setPendingAction(null);
@@ -77,15 +77,21 @@ export default function LoomDetails() {
             </div>
             <div>
               <p className="text-[10px] uppercase tracking-[0.22em] text-slate-400">Current Set</p>
-              <p className="mt-2 text-xl font-bold text-cyan-600 dark:text-cyan-400">SET {loom.currentSet}</p>
+              <p className="mt-2 text-xl font-bold text-cyan-600 dark:text-cyan-400">
+                {loom.currentSet ? `SET ${loom.currentSet}` : 'Not available'}
+              </p>
             </div>
             <div>
               <p className="text-[10px] uppercase tracking-[0.22em] text-slate-400">Current Meter</p>
-              <p className="mt-2 font-mono text-xl font-bold">{formatMeters(loom.currentMeter)} m</p>
+              <p className="mt-2 font-mono text-xl font-bold">
+                {loom.currentMeter != null ? `${formatMeters(loom.currentMeter)} m` : 'Not available'}
+              </p>
             </div>
             <div>
               <p className="text-[10px] uppercase tracking-[0.22em] text-slate-400">Total Meter Run</p>
-              <p className="mt-2 font-mono text-xl font-bold">{formatMeters(loom.totalMeterRun)} m</p>
+              <p className="mt-2 font-mono text-xl font-bold">
+                {loom.totalMeterRun != null ? `${formatMeters(loom.totalMeterRun)} m` : 'Not available'}
+              </p>
             </div>
           </div>
 

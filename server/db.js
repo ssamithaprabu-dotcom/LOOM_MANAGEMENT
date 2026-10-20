@@ -4,7 +4,6 @@ import path from 'path';
 import fs from 'fs';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
-import { initialLooms, defaultNotifications, defaultSettings } from '../src/data/mockData.js';
 
 dotenv.config();
 

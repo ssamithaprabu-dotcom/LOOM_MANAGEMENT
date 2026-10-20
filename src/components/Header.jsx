@@ -145,7 +145,7 @@ export default function Header() {
                 </div>
                 <div className="mt-1 space-y-0.5">
                   <Link
-                    to="/profile"
+                    to="/settings?tab=profile"
                     className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-medium transition ${
                       theme === 'light'
                         ? 'text-slate-700 hover:bg-slate-100'

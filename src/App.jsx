@@ -1,26 +1,28 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { LayoutDashboard, MonitorCog, PlusSquare, Settings, UserCircle2, LoaderCircle } from 'lucide-react';
+import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
+import { LayoutDashboard, Settings, LoaderCircle } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import LoomManagement from './pages/LoomManagement';
-import AddLoom from './pages/AddLoom';
 import LoomDetails from './pages/LoomDetails';
 import SettingsPage from './pages/Settings';
-import Profile from './pages/Profile';
 import Toast from './components/Toast';
 import { useLoomContext } from './context/LoomContext';
 
-// Exact Navigation Order specified in requirements:
+// Navigation Options:
 // 1. Dashboard
 // 2. Settings
-// 3. Profile
 const navItems = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { label: 'Settings', path: '/settings', icon: Settings },
-  { label: 'Profile', path: '/profile', icon: UserCircle2 },
 ];
+
+function AddLoomRedirect() {
+  const [searchParams] = useSearchParams();
+  const editId = searchParams.get('edit');
+  return <Navigate to={editId ? `/settings?tab=add-loom&edit=${editId}` : '/settings?tab=add-loom'} replace />;
+}
 
 function ProtectedLayout() {
   const { user, authChecked, theme, sidebarOpen } = useLoomContext();
@@ -52,8 +54,8 @@ function ProtectedLayout() {
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/settings" element={<SettingsPage />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/add-loom" element={<AddLoom />} />
+              <Route path="/profile" element={<Navigate to="/settings?tab=profile" replace />} />
+              <Route path="/add-loom" element={<AddLoomRedirect />} />
               <Route path="/loom/:loomId" element={<LoomDetails />} />
               <Route path="/loom-management" element={<Navigate to="/settings?tab=looms" replace />} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
